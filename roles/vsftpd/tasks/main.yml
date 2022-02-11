@@ -1,0 +1,51 @@
+- name: Installing vsftpd
+  package:
+    name: "{{ vsftpd_package }}"
+    state: latest
+
+- name: Enabling service
+  service:
+    name: "{{ vsftpd_service }}"
+    state: started
+    enabled: yes
+
+- name: Port opening
+  firewalld:
+    port: "{{ item.port }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - port: 20/tcp
+    - port: 21/tcp
+
+- name: Make upload dir
+  file:
+    path: /var/ftp/pub/upload
+    state: directory
+    owner: ftp
+    group: root
+    mode: 0755
+
+- name: Install module for SElinux configure
+  package:
+    name: policycoreutils-python-utils
+    state: latest
+
+- name: SElinux context
+  seboolean:
+    name: ftpd_anon_write
+    state: yes
+    persistent: yes
+
+- name: SElinux setting for upload
+  sefcontext:
+    target: "{{ upload_folder }}"
+    setype: public_content_rw_t
+    state: present
+  notify: Run restorecon
+
+- name: Config file
+  template:
+    src: "{{ vsftpd_config_template }}"
+    dest: "{{ vsftpd_config }}"
+  notify: Restart vsftpd

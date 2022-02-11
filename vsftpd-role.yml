@@ -1,0 +1,6 @@
+- name: Start apache role
+  hosts: all
+  gather_facts: false
+  become: true
+  roles:
+    - name: vsftpd

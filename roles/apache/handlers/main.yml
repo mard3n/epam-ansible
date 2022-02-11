@@ -1,0 +1,10 @@
+- name: Restart and enable httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+- name: Restart Firewalld
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes

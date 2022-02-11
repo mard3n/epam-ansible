@@ -1,0 +1,7 @@
+---
+# defaults file for vsftpd
+vsftpd_package: vsftpd
+vsftpd_service: vsftpd
+vsftpd_config: /etc/vsftpd/vsftpd.conf
+vsftpd_config_template: vsftpd.conf.j2
+upload_folder: /var/ftp/pub/upload

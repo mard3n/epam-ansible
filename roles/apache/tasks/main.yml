@@ -1,0 +1,25 @@
+- name: install httpd
+  yum:
+    name: httpd
+    state: latest
+  notify:
+    - restart and enable httpd
+- name: Create index file
+  file:
+    path: /var/www/html/index.html
+    state: touch
+- name: Add content to index.html
+  lineinfile:
+    dest: /var/www/html/index.html
+    line: "Welcome to my web server"
+
+# Firewalld
+- name: Open firewalld ports and notify for restart
+  firewalld:
+    port: "{{ item.port }}"
+    permanent: "{{ item.permanent }}"
+    state: enabled
+  with_items:
+    - { port: "80/tcp", permanent: true }
+    - { port: "443/tcp", permanent: true }
+  notify: Restart Firewalld
