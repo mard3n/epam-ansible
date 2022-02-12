@@ -3,7 +3,7 @@
     name: httpd
     state: latest
   notify:
-    - restart and enable httpd
+    - Restart and enable httpd
 - name: Create index file
   file:
     path: /var/www/html/index.html
